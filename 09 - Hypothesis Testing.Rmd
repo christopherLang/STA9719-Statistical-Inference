@@ -1,0 +1,109 @@
+---
+title: "Hypothesis Testing"
+author: "Christopher Lang"
+date: "May 2, 2016"
+output: html_document
+---
+
+## Introduction
+Let $X_1, X_2, \rightarrow X_n \sim f(X; \theta)$ be a random sample of size *n* from distribution $f(X; \theta)$. Then:
+
+* A hypothesis is a statement regard $\theta$
+* A simple hypothesis specifies the distribution of ***X*** completely
+* A composite hypothesis is a collection of simple hypothesis
+
+#### Example 1
+$X_1, X_2, \rightarrow X_n$ is a sample from $N(\mu,\sigma^2)$
+
+* $H_0$: $\mu=2, \sigma^2=1$ is a simple hypothesis
+* $H_0$: $\mu=2, \sigma^2$ is unspecified, $\sigma^2>0$ is a composite hypothesis
+* $H_1$: $\mu=2, \sigma^2=1$ is a composite
+
+
+In Neyman-Pearson style of statistics we test a null hypothesis $H_0$ against an alternative $H_1$:
+
+In general:
+
+* $H_0$: $\theta \in \omega_0$
+* $H_1$: $\theta \in \omega_1$
+* $\Omega$ = space of all possible $\theta$
+* $\omega_0 \subset \Omega$, $\omega_1 \subset \Omega$
+* $\omega_0 \cap \omega_1=\emptyset$
+
+Base on sample data ***X*** only that determines when to reject $H_0$ in favor of $H_1$, and when not to reject $H_0$
+
+The **level of significance** **$\alpha$** of a test is:
+$$\alpha=P(test\ rejects\ H_0\ |\ H_0\ is\ true)$$
+
+If $H_0$ is **simple**, say  $\theta=\theta_0$, then:
+$$\alpha=P(test\ rejects\ H_0|\theta=\theta_0)=P_0(test\ rejects\ H_0)$$
+
+In general, we should start by picking the **form** of the rejection region of a test and then pick down the exact rejection region (also called the **critical region**) using a given value of $\alpha$, say 
+$$\alpha={0.1\ or\ 0.05\ or\ 0.01}$$
+$$Critical\ region\ of\ a\ test=rejection\ region$$
+
+#### Example 2
+$X_1, X_2, \rightarrow X_n$ is a sample from $\Gamma(\alpha_0=2,\lambda>0)$
+
+$H_0:\ \lambda=\frac{1}{2}$, a simple hypothesis
+
+$H_1:\ \lambda>\frac{1}{2}$, a composite hypothesis
+
+Test at level $\alpha=0.05$
+
+Here $\theta=\lambda,\ \theta_0=\frac{1}{2}$
+
+The shape parameter **$\alpha_0=2$** is a given. A natural estimate of **$\lambda$** is its **MLE** and **MME**:
+$$\hat{\lambda}=\hat{\hat{\lambda}}=\frac{\alpha_0}{\overline{X}}=\frac{2}{\overline{X}}$$
+
+It is intuitively obvious that we should reject $H_0$ in favor of $H_1$ if:
+$$T(X)=\frac{2}{\overline{X}}>C$$
+$$for\ some\ constant\ C$$
+
+C is determined by $\alpha=0.05$, thusly:
+$$P(test\ reject\ H_0|H_0\ is\ true)=P(\frac{2}{\overline{X}}>C\ |\ \lambda=\frac{1}{2})$$
+$$P(\overline{X}<\frac{2}{C}\ |\ \lambda=\frac{1}{2})=P(\sum_{i=1}^{n}X_i<\frac{2n}{C}\ |\ \lambda=\frac{1}{2})$$
+$$P(\Gamma(\alpha=shape\ parameter=2n\cap\lambda=0.5\leq\frac{2n}{C})$$
+$$P(\chi^2_{4n}\leq\frac{2n}{C})=0.05$$
+
+Follows from the additivity of $\Gamma$ (sum of $\Gamma$ is again $\Gamma$ ). Hence the sum of *n* independent $\Gamma$(2,$\lambda$) is a $\Gamma$(2n,$\lambda$). With the aid of a $\chi^2$ table we find that:
+$$95\%\ percentile\ \chi^2_{4n,0.05}=\frac{2n}{C}\ and$$
+$$C=\frac{2n}{\chi^2_{4n,0.05}}$$
+
+The test is completely defined by its critical region. Hence reject $H_0$ if:
+$$\frac{2}{\overline{X}}>C$$
+
+
+#### Example 3 - How to perform normal approximation of chi-square percentiles
+If the sample size is n=20, 4n=80 show how to perform the normal approximation
+
+Calculate the $\chi^2$ critical-value:
+$$\chi^2_{80,0.05}\approx-1.645\sqrt{2\cdot80}+80=(z\sigma+\mu)=59.19221$$
+$$by\ Excel\ :\ CHISQ.INV(0.05,80)=60.39148$$
+
+If we observe that $\frac{2}{\overline{X}}=0.80$ in the sample, then:
+$$C=\frac{2n}{\chi^2_{80,0.05}}=\frac{40}{60.39148}=0.662345$$
+
+So since $\frac{2}{\overline{X}}>C$ and the test **rejects** $H_0$
+
+### The Power of a Test
+B($\lambda)$ = power of the test at $\lambda_1$ in the alternative $H_1$
+
+$$B(\lambda)=P(\frac{2}{\overline{X}}>C\ |\ \lambda=\lambda_1)$$
+$$for\ \lambda_1=0.6,\ 0.7,...\ is\ a\ function\ of\ \lambda_1!$$
+
+$$B(\lambda_1=P(\frac{2}{\overline{X}}>\frac{2n}{\chi^2_{4n,0.05}})=P(\sum_{i=1}^{n}<\chi^2_{4n,0.05}\ |\ \lambda_1)$$
+
+$$P(2\lambda_1\sum_{i=1}^{n}X_i<2\lambda_i\chi^2_{4n,0.05})$$
+
+$$P(\chi^2_{4n}<2\lambda_1\cdot60.39148)$$
+
+$\lambda_1$ | $B(\lambda_1)$
+----------- | --------------
+0.5         | 0.05
+0.6         | 0.2871
+0.8         | 0.6574
+0.9         | 0.9006
+1.0         | 0.9819
+1.1         | 0.9998
+1.2         | 0.999988
